@@ -8,8 +8,6 @@ import com.sparkmvc.init.PoolService;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
-import java.sql.SQLException;
 
 import static spark.Spark.awaitInitialization;
 import static spark.Spark.externalStaticFileLocation;
@@ -32,7 +30,7 @@ public class Main {
 
         String externarFolder = Config.get("spark.path.external", "/public");
         if(externarFolder.startsWith("...")){
-            externarFolder = externarFolder.replaceFirst("...", $.runFolder());
+            externarFolder = externarFolder.replace("...", $.runFolder());
         }
 
         externalStaticFileLocation(externarFolder);
