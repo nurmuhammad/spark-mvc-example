@@ -1,0 +1,11 @@
+.idea
+.idea/*
+target/*
+classes
+classes/*
+excluded/*
+logs/*
+log/*
+*.iml
+*.ipr
+*.iws
