@@ -9,3 +9,4 @@ log/*
 *.iml
 *.ipr
 *.iws
+.log

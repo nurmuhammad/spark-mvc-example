@@ -25,7 +25,7 @@ public class UserController {
 
     @GET(uri = "/")
     @Template(viewName = "login.ftl")
-    Object login(Request request, Response response) {
+    Object index(Request request, Response response) {
         Map<String, Object> map = new HashMap<>();
         return map;
     }
@@ -36,22 +36,25 @@ public class UserController {
         response.redirect("/");
     }
 
+    @GET(uri = "login")
     @POST(uri = "login")
     @Template(viewName = "login.ftl")
-    Object loginPost(Request request, Response response) {
-        String email = request.queryParams("email");
-        String password = request.queryParams("password");
-
-        User user = UserDao.instance.getUserByEmail(email);
-
-        if (user != null && $.md5(user.salt + password).equals(user.password)) {
-            request.session().attribute("user", user.email);
-            response.redirect("/user/welcome");
-            return null;
-        }
-
+    Object login(Request request, Response response) {
         Map<String, Object> map = new HashMap<>();
-        map.put("error", "please try again");
+        if (request.requestMethod().toLowerCase().equals("post")) {
+            String email = request.queryParams("email");
+            String password = request.queryParams("password");
+
+            User user = UserDao.instance.getUserByEmail(email);
+
+            if (user != null && $.md5(user.salt + password).equals(user.password)) {
+                request.session().attribute("user", user.email);
+                response.redirect("/user/welcome");
+                return null;
+            }
+
+            map.put("error", "please try again");
+        }
         return map;
     }
 

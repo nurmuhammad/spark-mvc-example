@@ -8,6 +8,7 @@
     <#if css??>${css}</#if>
     <#if js??>${js}</#if>
     <link rel="stylesheet" type="text/css" href="/css/pure-min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
     <#nested />
 </html>
