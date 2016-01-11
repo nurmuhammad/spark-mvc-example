@@ -20,6 +20,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+
         try {
             ScriptRunner runner = new ScriptRunner(PoolService.getDataSource().getConnection(), false, false);
             String file = $.runFolder() + File.separator + "dump.sql";
@@ -27,6 +28,7 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
 
         String externarFolder = Config.get("spark.path.external", "/public");
         if(externarFolder.startsWith("...")){
