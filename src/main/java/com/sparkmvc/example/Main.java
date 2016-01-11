@@ -11,7 +11,9 @@ import static spark.Spark.port;
  * @author nurmuhammad
  */
 public class Main {
+
     public static void main(String[] args) {
+
         externalStaticFileLocation(Config.get("spark.path.external", "/public"));
         port(Integer.valueOf(Config.get("spark.port", "8888")));
 
@@ -20,6 +22,7 @@ public class Main {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
+
         awaitInitialization();
     }
 }
