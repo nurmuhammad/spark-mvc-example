@@ -16,12 +16,6 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.j2html</groupId>
-            <artifactId>j2html</artifactId>
-            <version>${j2html.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.190</version>
@@ -31,6 +25,16 @@
             <groupId>com.sparkmvc</groupId>
             <artifactId>sparkmvc</artifactId>
             <version>0.1-SNAPSHOT</version>
+            <!--<exclusions>
+                <exclusion>
+                    <groupId>org.apache.velocity</groupId>
+                    <artifactId>velocity</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.mitchellbosecke</groupId>
+                    <artifactId>pebble</artifactId>
+                </exclusion>
+            </exclusions>-->
         </dependency>
 
     </dependencies>
