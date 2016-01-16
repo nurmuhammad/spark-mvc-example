@@ -20,6 +20,10 @@
 
                 <input type="text" name="email" size="30" class="login-input" maxlength="50" value="${email!}" placeholder="Email Address" autofocus>
                 <input type="password" name="password" size="30" class="login-input" placeholder="Password">
+            <#if r??>
+                <input type="hidden" name="r" value="${r}">
+            </#if>
+
             <div class="actions"><input type="submit" value="Sign In" class="login-submit"></div>
         </form>
     </div>

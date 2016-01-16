@@ -21,7 +21,6 @@ public class UserController {
 
     @Init
     void init() {
-
     }
 
     @GET(uri = "/")
@@ -40,46 +39,77 @@ public class UserController {
     @GET(uri = "login")
     @POST(uri = "login")
     @Template(viewName = "login.ftl")
-    Object login(Request request, Response response) {
+    Object login() {
+
+        String redirect = request().queryParams("r");
+        if (!isLoggedOut()) {
+            if (isEmpty(redirect)) {
+                response().redirect("/user/welcome");
+            } else {
+                response().redirect(b64decode(redirect));
+            }
+            return null;
+        }
+
         Map<String, Object> map = new HashMap<>();
-        if (request.requestMethod().toLowerCase().equals("post")) {
-            String email = request.queryParams("email");
-            String password = request.queryParams("password");
+        if (request().requestMethod().toLowerCase().equals("post")) {
+            String email = request().queryParams("email");
+            String password = request().queryParams("password");
 
             User user = UserDao.instance.getUserByEmail(email);
 
             if (user != null && $.md5(user.salt + password).equals(user.password)) {
-                request.session().attribute("user", user.email);
-                response.redirect("/user/welcome");
+                request().session().attribute("user", user.email);
+                if (isEmpty(redirect)) {
+                    response().redirect("/user/welcome");
+                } else {
+                    response().redirect(b64decode(redirect));
+                }
                 return null;
             }
-
             map.put("error", "please try again");
+        }
+
+        if (!isEmpty(redirect)) {
+            map.put("r", redirect);
         }
         return map;
     }
 
     @GET(uri = "/user/welcome")
     @Template(viewName = "welcome.ftl")
-    Object welcome(Request request, Response response) {
-        String email = request.session().attribute("user");
+    Object welcome() {
+        String email = session().attribute("user");
         Map<String, Object> map = new HashMap<>();
         map.put("email", email);
         return map;
     }
 
+    @GET(uri = "/user/welcome1")
+    @Template(viewName = "welcome.ftl")
+    Object welcome1() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("email", "test test test");
+        return map;
+    }
+
     @GET
     @Json
-    Object json(Request request, Response response) {
+    Object json() {
         return UserDao.instance.getUserByEmail("demo@gmail.com");
     }
 
-    @Before(uri = "/user/*")
-    void before(Request request, Response response) {
-        String email = request.session().attribute("user");
-        if ($.isEmpty(email)) {
-            response.redirect("/login");
+    @Before({@Uri("/user/*"), @Uri("/p/*")})
+    void before() {
+        if (isLoggedOut()) {
+            request().pathInfo();
+            response().redirect("/login?r=" + b64encode(path()));
         }
+    }
+
+    public static boolean isLoggedOut() {
+        String email = session().attribute("user");
+        return $.isEmpty(email);
     }
 
 
