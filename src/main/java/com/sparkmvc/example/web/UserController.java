@@ -9,7 +9,8 @@ import spark.Response;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+
+import static com.sparkmvc.helper.$.*;
 
 /**
  * @author nurmuhammad
@@ -25,15 +26,15 @@ public class UserController {
 
     @GET(uri = "/")
     @Template(viewName = "login.ftl")
-    Object index(Request request, Response response) {
+    Object index() {
         Map<String, Object> map = new HashMap<>();
         return map;
     }
 
     @GET
-    void logout(Request request, Response response) {
-        request.session().removeAttribute("user");
-        response.redirect("/");
+    void logout() {
+        session().removeAttribute("user");
+        response().redirect("/");
     }
 
     @GET(uri = "login")

@@ -4,14 +4,14 @@ import com.sparkmvc.helper.$;
 import com.sparkmvc.init.Application;
 import com.sparkmvc.init.Config;
 import com.sparkmvc.init.PoolService;
+import spark.Request;
+import spark.Response;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
-import static spark.Spark.awaitInitialization;
-import static spark.Spark.externalStaticFileLocation;
-import static spark.Spark.port;
+import static spark.Spark.*;
 
 /**
  * @author nurmuhammad
@@ -28,7 +28,6 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         String externarFolder = Config.get("spark.path.external", "/public");
         if(externarFolder.startsWith("...")){
