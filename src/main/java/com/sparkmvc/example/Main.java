@@ -4,8 +4,6 @@ import com.sparkmvc.helper.$;
 import com.sparkmvc.init.Application;
 import com.sparkmvc.init.Config;
 import com.sparkmvc.init.PoolService;
-import spark.Request;
-import spark.Response;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -44,5 +42,6 @@ public class Main {
         }
 
         awaitInitialization();
+
     }
 }

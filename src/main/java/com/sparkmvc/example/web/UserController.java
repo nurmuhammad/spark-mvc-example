@@ -19,11 +19,14 @@ import static com.sparkmvc.helper.$.*;
 @Controller
 public class UserController {
 
+    public static final String REMEMBER_ME = md5(b64encode("remember me"));
+    public static final String USER_SESSION = md5(b64encode("user session"));
+
     @Init
     void init() {
     }
 
-    @GET(uri = "/")
+    @GET("/")
     @Template(viewName = "login.ftl")
     Object index() {
         Map<String, Object> map = new HashMap<>();
@@ -32,14 +35,24 @@ public class UserController {
 
     @GET
     void logout() {
-        session().removeAttribute("user");
+        session().removeAttribute(USER_SESSION);
+        response().removeCookie(REMEMBER_ME);
         response().redirect("/");
     }
 
-    @GET(uri = "login")
-    @POST(uri = "login")
+    @GET("login")
+    @POST("login")
     @Template(viewName = "login.ftl")
     Object login() {
+
+        String cookieEmail = $.request().cookie(REMEMBER_ME);
+        if (isLoggedOut() && !isEmpty(cookieEmail)) {
+            User user = UserDao.instance.getUserByEmail(cookieEmail);
+            if (user != null) {
+                request().session().attribute(USER_SESSION, user.email);
+            }
+            return false;
+        }
 
         String redirect = request().queryParams("r");
         if (!isLoggedOut()) {
@@ -59,7 +72,14 @@ public class UserController {
             User user = UserDao.instance.getUserByEmail(email);
 
             if (user != null && $.md5(user.salt + password).equals(user.password)) {
-                request().session().attribute("user", user.email);
+                request().session().attribute(USER_SESSION, user.email);
+
+                if (!isEmpty(request().queryParams("remember-me"))) {
+
+                    response().cookie(REMEMBER_ME, user.email, 7 * 24 * 3600);
+
+                }
+
                 if (isEmpty(redirect)) {
                     response().redirect("/user/welcome");
                 } else {
@@ -76,16 +96,16 @@ public class UserController {
         return map;
     }
 
-    @GET(uri = "/user/welcome")
+    @GET("/user/welcome")
     @Template(viewName = "welcome.ftl")
     Object welcome() {
-        String email = session().attribute("user");
+        String email = session().attribute(USER_SESSION);
         Map<String, Object> map = new HashMap<>();
         map.put("email", email);
         return map;
     }
 
-    @GET(uri = "/user/welcome1")
+    @GET("/user/welcome1")
     @Template(viewName = "welcome.ftl")
     Object welcome1() {
         Map<String, Object> map = new HashMap<>();
@@ -108,7 +128,7 @@ public class UserController {
     }
 
     public static boolean isLoggedOut() {
-        String email = session().attribute("user");
+        String email = session().attribute(USER_SESSION);
         return $.isEmpty(email);
     }
 

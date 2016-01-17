@@ -18,8 +18,12 @@
         </#if>
         <form action="/login" method="post">
 
-                <input type="text" name="email" size="30" class="login-input" maxlength="50" value="${email!}" placeholder="Email Address" autofocus>
-                <input type="password" name="password" size="30" class="login-input" placeholder="Password">
+            <input type="text" name="email" size="30" class="login-input" maxlength="50" value="${email!}"
+                   placeholder="Email Address" autofocus/>
+            <input type="password" name="password" size="30" class="login-input" placeholder="Password"/>
+
+            <input type="checkbox" id="remember-me" name="remember-me" size="30" value="remember-me"/>
+            <label for="remember-me">Remember me</label>
             <#if r??>
                 <input type="hidden" name="r" value="${r}">
             </#if>
